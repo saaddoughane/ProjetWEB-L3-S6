@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mémoire arctique</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="memoire.css">
+
+</head>
+<body>
+    
+    <header class="header-jeu">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="titre-jeu">Mémoire arctique</h1>
+                <a href="../../index.html" class="bouton-retour">← Retour</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="zone-jeu">
+        <div class="container">
+            
+            <div class="infos-jeu">
+                <div class="info">
+                    <span class="label">Coups :</span>
+                    <span class="valeur" id="coups">0</span>
+                </div>
+                <div class="info">
+                    <span class="label">Temps :</span>
+                    <span class="valeur" id="temps">00:00</span>
+                </div>
+                <div class="info">
+                    <button class="bouton-recommencer" id="btnRecommencer">🔄 Recommencer</button>
+                </div>
+            </div>
+
+            <!-- Grille de cartes (générée dynamiquement par JS) -->
+            <div class="grille-cartes" id="grilleCartes">
+                <!-- Les 16 cartes seront créées ici par JavaScript -->
+            </div>
+
+            <!-- Modal de victoire (caché par défaut) -->
+            <div class="modal" id="modalVictoire">
+                <div class="modal-contenu">
+                    <h2>🎉 Bravo !</h2>
+                    <p>Vous avez terminé en <span id="coupsFinaux">0</span> coups</p>
+                    <p>Temps : <span id="tempsFinaux">00:00</span></p>
+                    <div class="modal-actions">
+                        <button class="bouton-modal" id="btnRejouer">Rejouer</button>
+                        <a href="../../index.html" class="bouton-modal">Retour aux jeux</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <footer class="footer-credits">
+        <p>
+            Icônes : 
+            <a href="https://www.flaticon.com/free-icons/polar-bear" target="_blank">paulalee</a>, 
+            <a href="https://www.flaticon.com/authors/freepik" target="_blank">Freepik</a>, 
+            <a href="https://www.flaticon.com/free-icons/penguin" target="_blank">Mihimihi</a>, 
+            <a href="https://www.flaticon.com/free-icons/whale" target="_blank">BZZRINCANTATION</a>, 
+            <a href="https://www.flaticon.com/free-icons/cold-fish" target="_blank">Prashu Rapol</a>
+            - Flaticon
+        </p>
+    </footer>
+
+
+    <script src="./memoire.js"></script>
+</body>
+</html>

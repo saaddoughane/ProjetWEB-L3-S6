@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameWorld — Auth</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-badge"><span></span></div>
+      <div>GameWorld</div>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Highscores</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn ghost" data-account-link href="auth.html">Login</a>
+      <a class="btn" data-logout-btn href="#" style="display:none;">Logout</a>
+    </div>
+  </div>
+</header>
+
+<main class="container page">
+  <h1 style="text-align:center; margin-top:0; margin-bottom:18px;">Login / Register</h1>
+
+  <div class="card">
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+      <button class="btn primary" type="button" id="btnLogin">Login</button>
+      <button class="btn" type="button" id="btnRegister">Register</button>
+    </div>
+
+    <div class="grid-2">
+      <section id="panelLogin">
+        <h2 style="margin-top:0;">Login</h2>
+        <form id="loginForm">
+          <div class="form-row">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="form-row">
+            <label for="loginPwd">Password</label>
+            <input id="loginPwd" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="btn primary" type="submit">Login</button>
+          <div class="notice err" id="loginErr" style="display:none;"></div>
+          <div class="notice" id="loginOk" style="display:none;"></div>
+        </form>
+      </section>
+
+      <section id="panelRegister" style="display:none;">
+        <h2 style="margin-top:0;">Register</h2>
+        <form id="registerForm">
+          <div class="form-row">
+            <label for="regEmail">Email</label>
+            <input id="regEmail" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="form-row">
+            <label for="regPwd">Password</label>
+            <input id="regPwd" name="password" type="password" autocomplete="new-password" required />
+          </div>
+          <div class="form-row">
+            <label for="regPwd2">Confirm password</label>
+            <input id="regPwd2" name="password2" type="password" autocomplete="new-password" required />
+          </div>
+
+          <button class="btn primary" type="submit">Create account</button>
+          <div class="notice err" id="regErr" style="display:none;"></div>
+          <div class="notice" id="regOk" style="display:none;"></div>
+        </form>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="js/main.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
