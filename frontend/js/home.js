@@ -18,6 +18,7 @@
   function animateOnce() {
     const a = pick(assets);
     const leftToRight = Math.random() < 0.5;
+    const flip = leftToRight ? 1 : -1;
 
     flyer.src = a.src;
     flyer.alt = a.alt;
@@ -46,9 +47,9 @@
 
     const anim = flyer.animate(
       [
-        { transform: `translate(${startX}px, ${y0}px) rotate(${tiltStart}deg) scale(${scale})`, opacity: 0 },
-        { transform: `translate(${(startX + endX) / 2}px, ${yPeak}px) rotate(${tiltMid}deg) scale(${scale})`, opacity: 1 },
-        { transform: `translate(${endX}px, ${yEnd}px) rotate(${tiltEnd}deg) scale(${scale})`, opacity: 0 }
+        { transform: `translate(${startX}px, ${y0}px) rotate(${tiltStart}deg) scale(${flip * scale}, ${scale})`},
+        { transform: `translate(${(startX + endX) / 2}px, ${yPeak}px) rotate(${tiltMid}deg) scale(${flip * scale}, ${scale})`},
+        { transform: `translate(${endX}px, ${yEnd}px) rotate(${tiltEnd}deg) scale(${flip * scale}, ${scale})`}
       ],
       { duration: dur, easing: "ease-in-out", fill: "forwards" }
     );
@@ -62,4 +63,14 @@
 
   const firstWait = rand(350, 900);
   setTimeout(animateOnce, firstWait);
+})();
+
+(function () {
+  const assistant = document.querySelector(".hero-assistant");
+  const bubble = document.querySelector(".hero-bubble");
+  if (!assistant || !bubble) return;
+
+  setTimeout(() => {
+    assistant.classList.add("is-bubble-on");
+  }, 3000);
 })();

@@ -22,7 +22,7 @@ function setNav() {
     accountLink.setAttribute("href", `${basePath()}dashboard.html`);
     if (logoutBtn) logoutBtn.style.display = "inline-flex";
   } else {
-    accountLink.textContent = "Login";
+    accountLink.textContent = "Connexion";
     accountLink.setAttribute("href", `${basePath()}auth.html`);
     if (logoutBtn) logoutBtn.style.display = "none";
   }
@@ -69,6 +69,35 @@ function initPins() {
     if (e.key === "Escape") closeAll();
   });
 }
+
+const navbar = document.querySelector('.nav');
+
+let lastScrollY = window.scrollY;
+let ticking = false;
+
+function handleScroll() {
+  const currentScrollY = window.scrollY;
+
+  if (Math.abs(currentScrollY - lastScrollY) < 10) return;
+
+  if (currentScrollY > lastScrollY && currentScrollY > 80) {
+    navbar.classList.add('is-hidden');
+  } else {
+    navbar.classList.remove('is-hidden');
+  }
+
+  lastScrollY = currentScrollY;
+}
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      handleScroll();
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
 
 setNav();
 attachLogout();
