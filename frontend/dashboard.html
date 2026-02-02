@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameWorld — Highscores</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-badge"><span></span></div>
+      <div>GameWorld</div>
+    </a>
+
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Highscores</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn ghost" data-account-link href="auth.html">Login</a>
+      <a class="btn" data-logout-btn href="#" style="display:none;">Logout</a>
+    </div>
+  </div>
+</header>
+
+<main class="container page">
+  <h1>Highscores Dashboard</h1>
+
+  <div class="notice" data-auth-guard>
+    Tu dois être connecté pour voir le dashboard. Redirection vers la page d’auth…
+  </div>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">Top 10 — Memory (Alaska)</h2>
+    <table class="table">
+      <thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead>
+      <tbody id="t-memory"></tbody>
+    </table>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">Top 10 — Typing (Amazonie)</h2>
+    <table class="table">
+      <thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead>
+      <tbody id="t-typing"></tbody>
+    </table>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">Top 10 — GeoGuesser (Sahara)</h2>
+    <table class="table">
+      <thead><tr><th>#</th><th>Player</th><th>Score</th></tr></thead>
+      <tbody id="t-geo"></tbody>
+    </table>
+  </section>
+
+  <section class="card" style="margin-top:14px;">
+    <h2 style="margin-top:0;">Global — Score cumulé</h2>
+    <table class="table">
+      <thead><tr><th>#</th><th>Player</th><th>Total</th></tr></thead>
+      <tbody id="t-global"></tbody>
+    </table>
+
+    <div class="notice" style="margin-top:12px;">
+      Les scores seront branchés après (structure prête).
+    </div>
+  </section>
+</main>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

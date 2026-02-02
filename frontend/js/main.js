@@ -1,119 +1,75 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+const SESSION_KEY = "gw_currentUser";
+const USERS_KEY = "gw_users";
 
-  const topbar = document.querySelector(".topbar");
-  const syncTopbarHeight = () => {
-    if (!topbar) return;
-    const h = Math.ceil(topbar.getBoundingClientRect().height);
-    document.documentElement.style.setProperty("--topbar-h", `${h}px`);
-  };
-  syncTopbarHeight();
-  window.addEventListener("resize", syncTopbarHeight);
+function basePath() {
+  return window.location.pathname.includes("/jeux/") ? "../../" : "";
+}
 
-  const btnAccess = document.getElementById("btnAccessGames");
-  const gamesSection = document.getElementById("gamesSection");
-  if (btnAccess && gamesSection) {
-    btnAccess.addEventListener("click", () => {
-      gamesSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+function getCurrentUser() {
+  try { return JSON.parse(sessionStorage.getItem(SESSION_KEY)); }
+  catch { return null; }
+}
+
+function setNav() {
+  const user = getCurrentUser();
+  const accountLink = document.querySelector("[data-account-link]");
+  const logoutBtn = document.querySelector("[data-logout-btn]");
+
+  if (!accountLink) return;
+
+  if (user && user.email) {
+    accountLink.textContent = `Account (${user.email})`;
+    accountLink.setAttribute("href", `${basePath()}dashboard.html`);
+    if (logoutBtn) logoutBtn.style.display = "inline-flex";
+  } else {
+    accountLink.textContent = "Login";
+    accountLink.setAttribute("href", `${basePath()}auth.html`);
+    if (logoutBtn) logoutBtn.style.display = "none";
   }
+}
 
-  const coverflow = document.getElementById("coverflow");
-  const cards = Array.from(document.querySelectorAll(".covercard"));
-  if (!coverflow || cards.length === 0) return;
+function attachLogout() {
+  const btn = document.querySelector("[data-logout-btn]");
+  if (!btn) return;
 
-  const n = cards.length;
-  const mod = (a, m) => ((a % m) + m) % m;
-
-  let activeIndex = Math.floor(Math.random() * n);
-
-  function setPositions(centerIdx) {
-    const leftIdx = mod(centerIdx - 1, n);
-    const rightIdx = mod(centerIdx + 1, n);
-
-    cards.forEach((c) => c.removeAttribute("data-pos"));
-
-    cards[centerIdx].setAttribute("data-pos", "center");
-    cards[leftIdx].setAttribute("data-pos", "left");
-    cards[rightIdx].setAttribute("data-pos", "right");
-  }
-
-  function goNext() {
-    activeIndex = mod(activeIndex + 1, n);
-    setPositions(activeIndex);
-  }
-
-  function goPrev() {
-    activeIndex = mod(activeIndex - 1, n);
-    setPositions(activeIndex);
-  }
-
-  setPositions(activeIndex);
-
-  cards.forEach((card, i) => {
-    card.addEventListener("click", () => {
-      activeIndex = i;
-      setPositions(activeIndex);
-    });
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem(SESSION_KEY);
+    setNav();
+    window.location.href = `${basePath()}index.html`;
   });
+}
 
-  let wheelAcc = 0;
-  let wheelLock = false;
-  let lastWheelTs = 0;
+function initPins() {
+  const pins = Array.from(document.querySelectorAll(".pin"));
+  if (pins.length === 0) return;
 
-  const WHEEL_RESET_MS = 220;
-  const WHEEL_COOLDOWN_MS = 260;
-  const WHEEL_THRESHOLD = 90;
-
-  function maybeStepFromWheel(delta) {
-    const now = performance.now();
-
-    if (now - lastWheelTs > WHEEL_RESET_MS) {
-      wheelAcc = 0;
-    }
-    lastWheelTs = now;
-
-    wheelAcc += delta;
-
-    if (wheelLock) return;
-
-    if (Math.abs(wheelAcc) >= WHEEL_THRESHOLD) {
-      wheelLock = true;
-
-      if (wheelAcc > 0) goNext();
-      else goPrev();
-
-      wheelAcc = wheelAcc > 0 ? wheelAcc - WHEEL_THRESHOLD : wheelAcc + WHEEL_THRESHOLD;
-
-      setTimeout(() => {
-        wheelLock = false;
-      }, WHEEL_COOLDOWN_MS);
-    }
+  function closeAll(except = null) {
+    pins.forEach(p => { if (p !== except) p.classList.remove("is-open"); });
   }
 
-  coverflow.addEventListener(
-    "wheel",
-    (e) => {
-      const absX = Math.abs(e.deltaX);
-      const absY = Math.abs(e.deltaY);
-
-      const isTrackpadHorizontal = absX > absY && absX > 0;
-
-      const isShiftWheel = e.shiftKey && absY > 0;
-
-      if (!isTrackpadHorizontal && !isShiftWheel) return;
+  pins.forEach(pin => {
+    pin.addEventListener("click", (e) => {
+      const clickedLink = e.target.closest("a");
+      if (clickedLink) return;
 
       e.preventDefault();
+      const willOpen = !pin.classList.contains("is-open");
+      closeAll();
+      if (willOpen) pin.classList.add("is-open");
+    });
+  });
 
-      const delta = isTrackpadHorizontal ? e.deltaX : e.deltaY;
-      maybeStepFromWheel(delta);
-    },
-    { passive: false }
-  );
+  document.addEventListener("click", (e) => {
+    const insidePin = e.target.closest(".pin");
+    if (!insidePin) closeAll();
+  });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowRight") goNext();
-    if (e.key === "ArrowLeft") goPrev();
+    if (e.key === "Escape") closeAll();
   });
-});
+}
+
+setNav();
+attachLogout();
+initPins();

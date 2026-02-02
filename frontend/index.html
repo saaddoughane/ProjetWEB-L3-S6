@@ -1,73 +1,89 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GameHub | Landing</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <title>GameWorld</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="topbar__left">
-      <div class="appmark" aria-hidden="true"></div>
-      <span class="appname">GameHub</span>
-    </div>
 
-    <nav class="topbar__nav" aria-label="Navigation principale">
-      <a class="navlink" href="./index.html" aria-current="page">Accueil</a>
-      <a class="navlink" href="./highscores.html">Highscores</a>
-      <a class="navlink navlink--cta" href="./login.html">Se connecter</a>
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-badge"><span></span></div>
+      <div>GameWorld</div>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Highscores</a>
     </nav>
-  </header>
 
-  <main class="page">
-    <section class="hero">
-      <h1 class="hero__title">Joue. Bats ton record. Monte au classement.</h1>
-      <p class="hero__desc">
-        Bienvenue sur GameHub : une application web de mini-jeux.
-        Choisis un jeu, lance une partie, et compare tes scores.
-      </p>
+    <div class="nav-cta">
+      <a class="btn ghost" data-account-link href="auth.html">Login</a>
+      <a class="btn" data-logout-btn href="#" style="display:none;">Logout</a>
+    </div>
+  </div>
+</header>
 
-      <div class="hero__actions">
-        <button id="btnAccessGames" class="btn btn--primary" type="button">
-          Accéder aux jeux
-        </button>
-        <a class="btn btn--ghost" href="./highscores.html">Voir les highscores</a>
+<main>
+  <section class="hero container">
+    <h1>WORLD<br/>GAME DAY</h1>
+    <p>
+      Pick a region and play the linked challenge.
+      Alaska (Memory), Amazon (Typing), Sahara (Geo).
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="auth.html">Login</a>
+      <a class="btn" href="dashboard.html">Highscores</a>
+    </div>
+  </section>
+
+  <section class="globe-stage" aria-label="Globe section">
+    <img class="globe-img" src="assets/globe.png" alt="Globe" />
+    <img class="flyer" id="flyer" alt="" />
+  </section>
+
+  <section class="pins-stage" aria-label="Choose a region">
+    <button class="pin alaska" type="button" aria-label="Memory — Alaska">
+      <div class="drop"></div>
+      <div class="pin-card">
+        <div class="thumb">Alaska — Memory</div>
+        <h3>Memory Card Game</h3>
+        <p>Find the pairs fast. Don’t get lost in the blizzard.</p>
+        <a href="jeux/memoire/memoire.html">Play →</a>
       </div>
-    </section>
+    </button>
 
-    <section class="games" id="gamesSection" aria-label="Jeux disponibles">
-      <h2 class="sectionTitle">Jeux</h2>
-
-      <div class="coverflow" id="coverflow" aria-label="Sélection des jeux">
-        <button class="covercard" type="button" data-index="0" data-game="game1">
-          <div class="covercard__media covercard__media--one" aria-hidden="true"></div>
-          <div class="covercard__title">Jeu 1</div>
-        </button>
-
-        <button class="covercard" type="button" data-index="1" data-game="game2">
-          <div class="covercard__media covercard__media--two" aria-hidden="true"></div>
-          <div class="covercard__title">Jeu 2</div>
-        </button>
-
-        <button class="covercard" type="button" data-index="2" data-game="game3">
-          <div class="covercard__media covercard__media--three" aria-hidden="true"></div>
-          <div class="covercard__title">Jeu 3</div>
-        </button>
+    <button class="pin amazon" type="button" aria-label="Typing — Amazon">
+      <div class="drop"></div>
+      <div class="pin-card">
+        <div class="thumb">Amazon — Typing</div>
+        <h3>Typing Game</h3>
+        <p>Type quickly and accurately to move forward.</p>
+        <a href="jeux/attrappe/attrappe.html">Play →</a>
       </div>
+    </button>
 
-      <p class="hint">
-        💡 Navigation : <b>clic</b> sur une carte, ou <b>touchpad</b> (scroll horizontal),
-        ou <b>Shift + molette</b> (souris).
-      </p>
-    </section>
-  </main>
+    <button class="pin sahara" type="button" aria-label="Geo — Sahara">
+      <div class="drop"></div>
+      <div class="pin-card">
+        <div class="thumb">Sahara — Geo</div>
+        <h3>GeoGuesser</h3>
+        <p>Guess your location. Closer means more points.</p>
+        <a href="jeux/troisiemejeu/trois.html">Play →</a>
+      </div>
+    </button>
+  </section>
+</main>
 
-  <footer class="footer">
-    <p>© <span id="year"></span> 2026 GameHub — MIAGE Web</p>
-  </footer>
+<footer class="footer container">
+  GameWorld -- Acile El Dada &amp; Saadeddine Doughane
+</footer>
 
-  <script src="./js/main.js" defer></script>
+<script src="js/main.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

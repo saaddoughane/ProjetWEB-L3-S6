@@ -1,0 +1,287 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);
+    min-height: 100vh;
+    color: #1d3557;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header-jeu {
+    padding: 1.5rem 0;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titre-jeu {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1d3557;
+}
+
+.bouton-retour {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.3);
+    color: #1d3557;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.bouton-retour:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateX(-5px);
+}
+
+.zone-jeu {
+    padding: 3rem 0;
+}
+
+
+.infos-jeu {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 20px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1d3557;
+}
+
+.label {
+    opacity: 0.8;
+}
+
+.valeur {
+    font-size: 1.5rem;
+    color: #e63946;
+    font-weight: 800;
+}
+
+.bouton-recommencer {
+    padding: 0.8rem 1.5rem;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.bouton-recommencer:hover {
+    background: #d62839;
+    transform: scale(1.05);
+}
+
+.grille-cartes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.carte {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.carte.retournee {
+    transform: rotateY(180deg);
+}
+
+.carte.trouvee {
+    animation: carteTrouvee 0.5s ease;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+.face-avant {
+    background: rgba(255, 255, 255, 0.4);
+    font-size: 3rem;
+    color: #1d3557;
+}
+
+.face-arriere {
+    background: #f1faee;
+    transform: rotateY(180deg);
+    padding: 1rem;
+}
+
+.face-arriere img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-contenu {
+    background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    color: #1d3557;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-contenu h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-contenu p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-contenu span {
+    color: #e63946;
+    font-weight: 800;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.bouton-modal {
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.4);
+    color: #1d3557;
+    text-decoration: none;
+    border: none;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.bouton-modal:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+}
+
+/* zone attribution crédits images*/ 
+.footer-credits {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 3rem;
+}
+
+.footer-credits p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    color: #1d3557;
+    line-height: 1.6;
+}
+
+.footer-credits a {
+    color: #e63946;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-credits a:hover {
+    text-decoration: underline;
+}
+
+@keyframes carteTrouvee {
+    0%, 100% { 
+        transform: scale(1); 
+    }
+    50% { 
+        transform: scale(1.1); 
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .grille-cartes {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.8rem;
+        max-width: 100%;
+    }
+    
+    .face-avant {
+        font-size: 2rem;
+    }
+    
+    .infos-jeu {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .titre-jeu {
+        font-size: 1.5rem;
+    }
+}
