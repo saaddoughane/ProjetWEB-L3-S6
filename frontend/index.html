@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GameWorld</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -16,44 +19,48 @@
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Highscores</a>
+      <a href="index.html">Accueil</a>
+      <a href="dashboard.html">Podium</a>
     </nav>
 
     <div class="nav-cta">
-      <a class="btn ghost" data-account-link href="auth.html">Login</a>
-      <a class="btn" data-logout-btn href="#" style="display:none;">Logout</a>
+      <a class="btn ghost" data-account-link href="auth.html">Connexion</a>
+      <a class="btn" data-logout-btn href="#" style="display:none;">Déconnexion</a>
     </div>
   </div>
 </header>
 
 <main>
   <section class="hero container">
-    <h1>WORLD<br/>GAME DAY</h1>
+    <h1>BIENVENUE DANS<br/>GAME WORLD</h1>
     <p>
-      Pick a region and play the linked challenge.
-      Alaska (Memory), Amazon (Typing), Sahara (Geo).
+      Choisis une région, joue au défi et bats toi contre les maîtres de l'univers !
     </p>
 
     <div class="hero-actions">
-      <a class="btn primary" href="auth.html">Login</a>
-      <a class="btn" href="dashboard.html">Highscores</a>
+      <a class="btn primary" href="auth.html">Connexion</a>
+      <a class="btn" href="dashboard.html">Podium</a>
+    </div>
+
+    <div class="hero-assistant" aria-hidden="true">
+      <img class="hero-robot" src="assets/robot.png" alt="Robot" />
+      <img class="hero-bubble" src="assets/bulle.png" alt="Défile vers le bas pour atterir !"/>
     </div>
   </section>
 
   <section class="globe-stage" aria-label="Globe section">
     <img class="globe-img" src="assets/globe.png" alt="Globe" />
-    <img class="flyer" id="flyer" alt="" />
+    <img class="flyer" id="flyer" alt="Objet volant" />
   </section>
 
   <section class="pins-stage" aria-label="Choose a region">
     <button class="pin alaska" type="button" aria-label="Memory — Alaska">
       <div class="drop"></div>
       <div class="pin-card">
-        <div class="thumb">Alaska — Memory</div>
-        <h3>Memory Card Game</h3>
-        <p>Find the pairs fast. Don’t get lost in the blizzard.</p>
-        <a href="jeux/memoire/memoire.html">Play →</a>
+        <div class="thumb">Alaska — Mémoire Arctique</div>
+        <h3>Jeu de cartes mémoire</h3>
+        <p>Trouve rapidement les paires. Ne te perds pas dans la tempête de neige.</p>
+        <a href="jeux/memoire/memoire.html">Jouer →</a>
       </div>
     </button>
 
@@ -63,7 +70,7 @@
         <div class="thumb">Amazon — Typing</div>
         <h3>Typing Game</h3>
         <p>Type quickly and accurately to move forward.</p>
-        <a href="jeux/attrappe/attrappe.html">Play →</a>
+        <a href="jeux/attrappe/attrappe.html">Jouer →</a>
       </div>
     </button>
 
@@ -73,15 +80,11 @@
         <div class="thumb">Sahara — Geo</div>
         <h3>GeoGuesser</h3>
         <p>Guess your location. Closer means more points.</p>
-        <a href="jeux/troisiemejeu/trois.html">Play →</a>
+        <a href="jeux/troisiemejeu/trois.html">Jouer →</a>
       </div>
     </button>
   </section>
 </main>
-
-<footer class="footer container">
-  GameWorld -- Acile El Dada &amp; Saadeddine Doughane
-</footer>
 
 <script src="js/main.js"></script>
 <script src="js/home.js"></script>
