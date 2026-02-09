@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GameWorld — Auth</title>
+  <title>GameWorld — Connexion</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -16,61 +17,83 @@
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Highscores</a>
+      <a href="index.html">Accueil</a>
+      <a href="dashboard.html">Podium</a>
     </nav>
 
     <div class="nav-cta">
-      <a class="btn ghost" data-account-link href="auth.html">Login</a>
-      <a class="btn" data-logout-btn href="#" style="display:none;">Logout</a>
+      <a class="btn ghost" data-account-link href="auth.html">Connexion</a>
+      <a class="btn" data-logout-btn href="#" style="display:none;">Déconnexion</a>
     </div>
   </div>
 </header>
 
-<main class="container page">
-  <h1 style="text-align:center; margin-top:0; margin-bottom:18px;">Login / Register</h1>
-
+<main class="container page auth-page">
   <div class="card">
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-      <button class="btn primary" type="button" id="btnLogin">Login</button>
-      <button class="btn" type="button" id="btnRegister">Register</button>
-    </div>
-
     <div class="grid-2">
       <section id="panelLogin">
-        <h2 style="margin-top:0;">Login</h2>
+        <h1 style="margin-top:0;">Se connecter</h1>
         <form id="loginForm">
           <div class="form-row">
             <label for="loginEmail">Email</label>
-            <input id="loginEmail" name="email" type="email" autocomplete="email" required />
+            <br/>
+            <input id="loginEmail" name="email" type="email" placeholder="exemple@gmail.com" autocomplete="email" required />
           </div>
+          <br/>
+
           <div class="form-row">
-            <label for="loginPwd">Password</label>
-            <input id="loginPwd" name="password" type="password" autocomplete="current-password" required />
+            <label for="loginPwd">Mot de passe</label>
+            <br/>
+            <div class="pwd-field">
+              <input id="loginPwd" name="password" type="password" placeholder="Votre mot de passe" autocomplete="current-password" required />
+              <button class="pwd-toggle" type="button" data-target="loginPwd" aria-label="Afficher/masquer le mot de passe">👁</button>
+            </div>
           </div>
-          <button class="btn primary" type="submit">Login</button>
+
+          <br/>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn primary" type="submit">Valider</button>
+            <button class="btn" type="button" id="goRegister">Inscription</button>
+          </div>
           <div class="notice err" id="loginErr" style="display:none;"></div>
           <div class="notice" id="loginOk" style="display:none;"></div>
         </form>
       </section>
 
       <section id="panelRegister" style="display:none;">
-        <h2 style="margin-top:0;">Register</h2>
+        <h1 style="margin-top:0;">S'inscrire</h1>
         <form id="registerForm">
           <div class="form-row">
             <label for="regEmail">Email</label>
-            <input id="regEmail" name="email" type="email" autocomplete="email" required />
+            <br/>
+            <input id="regEmail" name="email" type="email" placeholder="exemple@mail.com" autocomplete="email" required />
           </div>
+          <br/>
+
           <div class="form-row">
-            <label for="regPwd">Password</label>
-            <input id="regPwd" name="password" type="password" autocomplete="new-password" required />
+            <label for="regPwd">Mot de passe</label>
+            <br/>
+            <div class="pwd-field">
+              <input id="regPwd" name="password" type="password" placeholder="Votre mot de passe" autocomplete="new-password" required />
+              <button class="pwd-toggle" type="button" data-target="regPwd" aria-label="Afficher/masquer le mot de passe">👁</button>
+            </div>
           </div>
+          <br/>
+
           <div class="form-row">
-            <label for="regPwd2">Confirm password</label>
-            <input id="regPwd2" name="password2" type="password" autocomplete="new-password" required />
+            <label for="regPwd2">Confirmation mot de passe</label>
+            <br/>
+            <div class="pwd-field">
+              <input id="regPwd2" name="password2" type="password" placeholder="Votre mot de passe" autocomplete="new-password" required />
+              <button class="pwd-toggle" type="button" data-target="regPwd2" aria-label="Afficher/masquer le mot de passe">👁</button>
+            </div>
           </div>
 
-          <button class="btn primary" type="submit">Create account</button>
+          <br/>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn primary" type="submit">Créer compte</button>
+            <button class="btn" type="button" id="goLogin">Connexion</button>
+          </div>
           <div class="notice err" id="regErr" style="display:none;"></div>
           <div class="notice" id="regOk" style="display:none;"></div>
         </form>

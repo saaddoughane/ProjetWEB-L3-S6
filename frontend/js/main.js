@@ -18,7 +18,7 @@ function setNav() {
   if (!accountLink) return;
 
   if (user && user.email) {
-    accountLink.textContent = `Account (${user.email})`;
+    accountLink.textContent = "Mon Compte";
     accountLink.setAttribute("href", `${basePath()}dashboard.html`);
     if (logoutBtn) logoutBtn.style.display = "inline-flex";
   } else {
@@ -98,6 +98,59 @@ window.addEventListener('scroll', () => {
     ticking = true;
   }
 });
+
+// ================= UI based on session =================
+(function () {
+  const heroBtn = document.getElementById("heroAccountBtn");
+  const navLoginBtn = document.getElementById("navAccountBtn") || document.querySelector("[data-account-link]");
+  const logoutBtn   = document.getElementById("logoutBtn")     || document.querySelector("[data-logout-btn]");
+
+  const currentUser = sessionStorage.getItem("gw_currentUser");
+
+  if (currentUser) {
+    // USER CONNECTED
+
+    // Hero button → Mon compte
+    if (heroBtn) {
+      heroBtn.textContent = "Mon compte";
+      heroBtn.href = "dashboard.html";
+    }
+
+    // Navbar: hide Login
+    if (navLoginBtn) {
+      navLoginBtn.style.display = "none";
+    }
+
+    // Navbar: show Logout
+    if (logoutBtn) {
+      logoutBtn.style.display = "inline-flex";
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem("gw_currentUser");
+        window.location.reload();
+      });
+    }
+
+  } else {
+    // USER NOT CONNECTED
+
+    // Hero button → Login
+    if (heroBtn) {
+      heroBtn.textContent = "Connexion";
+      heroBtn.href = "auth.html";
+    }
+
+    // Navbar: show Login
+    if (navLoginBtn) {
+      navLoginBtn.style.display = "inline-flex";
+    }
+
+    // Navbar: hide Logout
+    if (logoutBtn) {
+      logoutBtn.style.display = "none";
+    }
+  }
+})();
 
 setNav();
 attachLogout();
