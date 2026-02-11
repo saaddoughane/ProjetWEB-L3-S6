@@ -33,13 +33,16 @@
   }
   if (guard) guard.style.display = "none";
 
-  // ------- Password eye toggles -------
+    // ------- Password eye toggles -------
   document.querySelectorAll(".pwd-toggle").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-target");
-      const input = document.getElementById(id);
+      const targetId = btn.getAttribute("data-target");
+      const input = targetId ? document.getElementById(targetId) : null;
       if (!input) return;
-      input.type = input.type === "password" ? "text" : "password";
+
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      btn.textContent = isHidden ? "🙈" : "🐵";
     });
   });
 
@@ -68,6 +71,15 @@
     const d = new Date(iso);
     if (Number.isNaN(d.getTime())) return "—";
     return d.toLocaleDateString("fr-FR");
+  }
+
+    function dateMs(iso) {
+    const t = new Date(iso || 0).getTime();
+    return Number.isNaN(t) ? 0 : t;
+  }
+
+  function top3MostRecent(arr) {
+    return [...arr].sort((a, b) => dateMs(b.date) - dateMs(a.date)).slice(0, 3);
   }
 
   function readGameScores(gameKey) {
@@ -121,6 +133,46 @@
     return best;
   }
 
+  function bestScoreWithDateForEmail(entries, email, scorerFn) {
+    let bestScore = null;
+    let bestDate = "";
+
+    for (const e of entries) {
+      if (normalizeEmail(e) !== email) continue;
+
+      const s = scorerFn(e);
+      const d = e?.date || "";
+
+      if (bestScore === null || s > bestScore) {
+        bestScore = s;
+        bestDate = d;
+      } else if (bestScore !== null && s === bestScore) {
+        // si égalité, on garde la plus récente
+        if (dateMs(d) > dateMs(bestDate)) bestDate = d;
+      }
+    }
+
+    return { score: bestScore ?? 0, date: bestDate };
+  }
+
+
+    function topNBestForEmail(entries, email, scorerFn, n) {
+    const mine = entries
+      .filter(e => normalizeEmail(e) === email)
+      .map(e => ({ score: scorerFn(e), date: e.date }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, n);
+
+    const sum = mine.reduce((acc, x) => acc + (Number(x.score) || 0), 0);
+    const mostRecent = mine.reduce((bestIso, x) => {
+      if (!x.date) return bestIso;
+      if (!bestIso) return x.date;
+      return dateMs(x.date) > dateMs(bestIso) ? x.date : bestIso;
+    }, "");
+
+    return { sum, mostRecent };
+  }
+
   // ------- Render: My scores -------
   const email = user.email;
   const accEmail = document.getElementById("accEmail");
@@ -145,9 +197,22 @@
   if (bestTypingEl) bestTypingEl.textContent = String(bestTyp || "—");
   if (bestGeoEl) bestGeoEl.textContent = String(bestGeo || "—");
 
-  const total = (bestMem ?? 0) + (bestTyp ?? 0) + (bestGeo ?? 0);
+  const memBest = bestScoreWithDateForEmail(memAll, email, memoryToPoints);
+  const typBest = bestScoreWithDateForEmail(typAll, email, genericToPoints);
+  const geoBest = bestScoreWithDateForEmail(geoAll, email, genericToPoints);
+
+  const total = (memBest.score || 0) + (typBest.score || 0) + (geoBest.score || 0);
+
+  const globalMostRecent = [memBest.date, typBest.date, geoBest.date]
+    .filter(Boolean)
+    .sort((a, b) => dateMs(b) - dateMs(a))[0] || "";
+
   const accTotal = document.getElementById("accTotal");
-  if (accTotal) accTotal.textContent = String(total || "—");
+  if (accTotal) {
+    accTotal.textContent = globalMostRecent
+      ? `${total} — ${fmtDate(globalMostRecent)}`
+      : String(total || "—");
+  }
 
   function renderEmptyRow(tbodyId, colspan) {
     const tb = document.getElementById(tbodyId);
@@ -160,15 +225,14 @@
     if (!tb) return;
     if (!memMine.length) return renderEmptyRow("myMemoryRows", 5);
 
-    const rows = memMine
+    const rows = top3MostRecent(memMine)
       .map(e => ({
         date: fmtDate(e.date),
         niveau: Number(e.niveau ?? 1),
         coups: Number(e.coups ?? 0),
         temps: Number(e.temps ?? 0),
         score: memoryToPoints(e)
-      }))
-      .sort((a, b) => (b.score - a.score));
+      }));
 
     tb.innerHTML = rows.map(r => `
       <tr>
@@ -186,9 +250,9 @@
     if (!tb) return;
     if (!mine.length) return renderEmptyRow(tbodyId, 2);
 
-    const rows = mine
-      .map(e => ({ date: fmtDate(e.date), score: scorerFn(e) }))
-      .sort((a, b) => b.score - a.score);
+    const rows = top3MostRecent(mine)
+      .map(e => ({ date: fmtDate(e.date), score: scorerFn(e) }));
+
 
     tb.innerHTML = rows.map(r => `
       <tr>

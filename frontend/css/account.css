@@ -185,14 +185,5 @@
   padding: 6px;
   line-height: 1;
   font-size: 18px;
-  color: rgba(255,255,255,.85);
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.28));
-}
-
-.pwd-toggle:hover{ color: rgba(255,255,255,1); }
-
-.pwd-toggle:focus-visible{
-  outline: 2px solid rgba(255,255,255,.6);
-  outline-offset: 3px;
-  border-radius: 8px;
+  color: rgba(0,0,0,.65);
 }
