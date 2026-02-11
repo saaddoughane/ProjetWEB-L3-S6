@@ -1,0 +1,198 @@
+.account-page{
+  color:#fff;
+}
+
+.account-shell{
+  border-radius: 28px;
+  padding: 20px;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 22px 60px rgba(0,0,0,.28);
+}
+
+.account-title{
+  text-align:center;
+  margin: 0 0 12px;
+  letter-spacing: 1.2px;
+  font-size: clamp(34px, 4vw, 54px);
+}
+
+.account-grid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 900px){
+  .account-grid{
+    grid-template-columns: 1.15fr .85fr;
+    align-items: start;
+  }
+}
+
+.account-card{
+  padding: 16px 16px 14px;
+}
+
+.account-h2{
+  margin: 0 0 12px;
+  text-align:center;
+  letter-spacing: .9px;
+  font-size: 30px;
+}
+
+.account-h3{
+  margin: 0 0 10px;
+  text-align:center;
+  letter-spacing: .7px;
+  font-size: 22px;
+}
+
+.account-summary{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.pill{
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(10,18,26,.28);
+  border: 1px solid rgba(255,255,255,.16);
+  display:flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pill-label{opacity:.8; letter-spacing:.6px}
+.pill-value{font-weight: 700; letter-spacing:.7px}
+
+.score-cards{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.score-card{
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+.score-card h3{
+  margin: 0 0 8px;
+  text-align:center;
+  letter-spacing: .8px;
+  font-size: 22px;
+}
+
+.score-big{
+  text-align:center;
+  font-size: 34px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+/* Table styling (same vibe as podium) */
+.table-wrap{
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 16px;
+}
+
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 340px;
+  background: rgba(10,18,26,.25);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.table th, .table td{
+  padding: 10px 12px;
+  text-align: left;
+  color: rgba(255,255,255,.92);
+}
+
+.table thead th{
+  background: rgba(255,255,255,.10);
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  letter-spacing: .6px;
+}
+
+.table tbody tr{
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+
+.table tbody tr:last-child{
+  border-bottom: none;
+}
+
+.table tbody tr:hover{
+  background: rgba(255,255,255,.06);
+}
+
+/* Compact table helpers */
+.table-compact th, .table-compact td{
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.account-form{
+  display:grid;
+  gap: 10px;
+}
+
+.account-form label{
+  letter-spacing: .6px;
+}
+
+.account-form input{
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.92);
+  color: rgba(0,0,0,.85);
+  outline: none;
+}
+
+/* Eye toggle (account only) */
+.pwd-field{
+  position: relative;
+  display: block;
+}
+
+.pwd-field input{
+  padding-right: 44px;
+}
+
+.pwd-toggle{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+  font-size: 18px;
+  color: rgba(255,255,255,.85);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.28));
+}
+
+.pwd-toggle:hover{ color: rgba(255,255,255,1); }
+
+.pwd-toggle:focus-visible{
+  outline: 2px solid rgba(255,255,255,.6);
+  outline-offset: 3px;
+  border-radius: 8px;
+}

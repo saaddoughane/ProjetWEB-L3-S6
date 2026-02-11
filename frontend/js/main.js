@@ -19,7 +19,7 @@ function setNav() {
 
   if (user && user.email) {
     accountLink.textContent = "Mon Compte";
-    accountLink.setAttribute("href", `${basePath()}dashboard.html`);
+    accountLink.setAttribute("href", `${basePath()}account.html`);
     if (logoutBtn) logoutBtn.style.display = "inline-flex";
   } else {
     accountLink.textContent = "Connexion";
@@ -113,7 +113,7 @@ window.addEventListener('scroll', () => {
     // Hero button → Mon compte
     if (heroBtn) {
       heroBtn.textContent = "Mon compte";
-      heroBtn.href = "dashboard.html";
+      heroBtn.href = "account.html";
     }
 
     // Navbar: hide Login
