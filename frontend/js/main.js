@@ -1,11 +1,11 @@
-const SESSION_KEY = "gw_currentUser";
+const SESSION_KEY = "gw_session";
 
 function basePath() {
   return window.location.pathname.includes("/jeux/") ? "../../" : "";
 }
 
 function getCurrentUser() {
-  try { return JSON.parse(sessionStorage.getItem(SESSION_KEY)); }
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
   catch { return null; }
 }
 
@@ -33,7 +33,7 @@ function attachLogout() {
 
   btn.addEventListener("click", (e) => {
     e.preventDefault();
-    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
     setNav();
     window.location.href = `${basePath()}index.html`;
   });
@@ -69,7 +69,11 @@ function initPins() {
   });
 }
 
-const navbar = document.querySelector('.nav');
+  let navbar = null;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    navbar = document.querySelector('.nav');
+  });
 
 let lastScrollY = window.scrollY;
 let ticking = false;
@@ -78,6 +82,8 @@ function handleScroll() {
   const currentScrollY = window.scrollY;
 
   if (Math.abs(currentScrollY - lastScrollY) < 10) return;
+
+  if (!navbar) return;
 
   if (currentScrollY > lastScrollY && currentScrollY > 80) {
     navbar.classList.add('is-hidden');
@@ -98,59 +104,6 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// ================= UI based on session =================
-(function () {
-  const heroBtn = document.getElementById("heroAccountBtn");
-  const navLoginBtn = document.getElementById("navAccountBtn") || document.querySelector("[data-account-link]");
-  const logoutBtn   = document.getElementById("logoutBtn")     || document.querySelector("[data-logout-btn]");
-
-  const currentUser = sessionStorage.getItem("gw_currentUser");
-
-  if (currentUser) {
-    // USER CONNECTED
-
-    // Hero button → Mon compte
-    if (heroBtn) {
-      heroBtn.textContent = "Mon compte";
-      heroBtn.href = "account.html";
-    }
-
-    // Navbar: hide Login
-    if (navLoginBtn) {
-      navLoginBtn.style.display = "none";
-    }
-
-    // Navbar: show Logout
-    if (logoutBtn) {
-      logoutBtn.style.display = "inline-flex";
-      logoutBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        sessionStorage.removeItem("gw_currentUser");
-        window.location.reload();
-      });
-    }
-
-  } else {
-    // USER NOT CONNECTED
-
-    // Hero button → Login
-    if (heroBtn) {
-      heroBtn.textContent = "Connexion";
-      heroBtn.href = "auth.html";
-    }
-
-    // Navbar: show Login
-    if (navLoginBtn) {
-      navLoginBtn.style.display = "inline-flex";
-    }
-
-    // Navbar: hide Logout
-    if (logoutBtn) {
-      logoutBtn.style.display = "none";
-    }
-  }
-})();
-
 // ===== SAVE SCORE GLOBAL =====
 const SCORES_KEY = "gw_scores";
 
@@ -161,7 +114,7 @@ function saveScore(game, score) {
   const scores = JSON.parse(localStorage.getItem(SCORES_KEY)) || [];
 
   scores.push({
-    user: session.email,
+    email: session.email,
     game: game,
     score: score,
     date: new Date().toISOString()

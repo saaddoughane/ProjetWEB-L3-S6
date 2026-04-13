@@ -4,8 +4,7 @@
   const USERS_KEY_LOCAL =
     (typeof USERS_KEY !== "undefined" && USERS_KEY) ? USERS_KEY : "gw_users";
 
-  const SESSION_KEY_LOCAL =
-    (typeof SESSION_KEY !== "undefined" && SESSION_KEY) ? SESSION_KEY : "gw_currentUser";
+  const SESSION_KEY_LOCAL = "gw_session";
 
   function readUsers() {
     try { return JSON.parse(localStorage.getItem(USERS_KEY_LOCAL)) ?? []; }
@@ -42,6 +41,10 @@
     if (!el) return;
     el.style.display = "none";
     el.textContent = "";
+  }
+
+  function hash(pwd) {
+    return btoa(pwd);
   }
 
   const btnLogin = document.getElementById("btnLogin");
@@ -87,7 +90,7 @@
       const password = loginForm.password.value;
 
       if (!isValidEmail(email)) return show(loginErr, "Email invalide.");
-      if (!isValidPassword(password)) return show(loginErr, "Le mot e passe doit contenir entre 6 et 64 caractères.");
+      if (!isValidPassword(password)) return show(loginErr, "Le mot de passe doit contenir entre 6 et 64 caractères.");
 
       const users = readUsers();
       const user = users.find(u => u.email === email);
@@ -99,7 +102,7 @@
         return;
       }
 
-      if (user.password !== password) {
+      if (user.password !== hash(password)) {
         show(loginErr, "Mot de passe incorrect.");
         return;
       }
@@ -120,13 +123,13 @@
       const pwd2 = registerForm.password2.value;
 
       if (!isValidEmail(email)) return show(regErr, "Email invalide.");
-      if (!isValidPassword(pwd1)) return show(regErr, "Le mot e passe doit contenir entre 6 et 64 caractères.");
+      if (!isValidPassword(pwd1)) return show(regErr, "Le mot de passe doit contenir entre 6 et 64 caractères.");
       if (pwd1 !== pwd2) return show(regErr, "Les mots de passe doivent être identiques.");
 
       const users = readUsers();
       if (users.some(u => u.email === email)) return show(regErr, "Email déjà utilisé.");
 
-      users.push({ email, password: pwd1, createdAt: new Date().toISOString() });
+      users.push({ email, password: hash(pwd1), createdAt: new Date().toISOString() });
       writeUsers(users);
 
       show(regOk, "Compte créé. Tu peux te connecter.");

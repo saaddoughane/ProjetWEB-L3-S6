@@ -1,9 +1,9 @@
 (function () {
-  const SESSION_KEY = "gw_currentUser";
+  const SESSION_KEY = "gw_session";
   const USERS_KEY = "gw_users";
 
   function getCurrentUser() {
-    try { return JSON.parse(sessionStorage.getItem(SESSION_KEY)); }
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
     catch { return null; }
   }
 
@@ -21,6 +21,10 @@
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
+  }
+
+  function hash(pwd) {
+    return btoa(pwd);
   }
 
   // ------- Guard -------
@@ -83,33 +87,8 @@
   }
 
   function readGameScores(gameKey) {
-    const candidates = [
-      `gw_scores_${gameKey}`,
-      `gw_${gameKey}_scores`,
-      `${gameKey}_scores`,
-      `scores_${gameKey}`,
-      `scores-${gameKey}`
-    ];
-
-    for (const k of candidates) {
-      const raw = localStorage.getItem(k);
-      if (!raw) continue;
-      const arr = safeParse(raw, []);
-      if (Array.isArray(arr)) return arr;
-    }
-
-    // Fallback: ancien stockage du jeu mémoire dans sessionStorage("scores")
-    const ss = safeParse(sessionStorage.getItem("scores"), []);
-    if (Array.isArray(ss) && ss.length) {
-      const key = String(gameKey).toLowerCase();
-      return ss.filter(s => {
-        const n = String(s.nomJeu || "").toLowerCase();
-        if (key === "memory") return n.includes("mémoire") || n.includes("memoire") || n.includes("memory");
-        return n.includes(key);
-      });
-    }
-
-    return [];
+    const all = safeParse(localStorage.getItem("gw_scores"), []);
+    return all.filter(s => s.game === gameKey);
   }
 
   function normalizeEmail(entry) {
@@ -301,24 +280,6 @@
 
       if (changed) localStorage.setItem(k, JSON.stringify(arr));
     }
-
-    // Update sessionStorage "scores" (ancienne version du mémoire)
-    const ss = safeParse(sessionStorage.getItem("scores"), null);
-    if (Array.isArray(ss)) {
-      let changed = false;
-      for (const e of ss) {
-        if (!e || typeof e !== "object") continue;
-        if (String(e.utilisateur ?? "") === oldEmail) {
-          e.utilisateur = newEmail;
-          changed = true;
-        }
-        if (String(e.email ?? "") === oldEmail) {
-          e.email = newEmail;
-          changed = true;
-        }
-      }
-      if (changed) sessionStorage.setItem("scores", JSON.stringify(ss));
-    }
   }
 
   if (emailForm) {
@@ -347,7 +308,7 @@
       writeUsers(users);
 
       // Update session + scores
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ email: newEmail }));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ email: newEmail }));
       updateEmailEverywhere(email, newEmail);
 
       showMsg(emailOk, emailErr, "Email mis à jour ✅", "");
@@ -377,11 +338,11 @@
         return showMsg(pwdOk, pwdErr, "", "Utilisateur introuvable.");
       }
 
-      if (String(users[idx].password || "") !== currentPwd) {
+      if (String(users[idx].password || "") !== hash(currentPwd)) {
         return showMsg(pwdOk, pwdErr, "", "Mot de passe actuel incorrect.");
       }
 
-      users[idx].password = newPwd;
+      users[idx].password = hash(newPwd);
       writeUsers(users);
 
       showMsg(pwdOk, pwdErr, "Mot de passe mis à jour ✅", "");
