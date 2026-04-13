@@ -1,0 +1,328 @@
+
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fredoka', 'Montserrat', sans-serif;
+    min-height: 100vh;
+   
+    color: #2D5016;
+    position: relative;
+    overflow-x: hidden;
+
+    /* ajout img de fond pour entrer dans le thème jungle*/
+    background: url('../assets/jungle-background.jpg') center/cover no-repeat fixed;
+}
+
+
+body::before {
+    content: '';
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(255, 255, 255, 0.1);
+    animation: pulse 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+
+}
+
+@keyframes pulse {
+
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+}
+
+.jeu-container {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.titre-zone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+.titre-principal {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.titre-mot {
+    display: block;
+}
+
+.titre-mot:first-child {
+    color: #2D5016;
+    text-shadow: 3px 3px 0 rgba(255, 223, 100, 0.3);
+}
+
+.titre-mot.amazonie {
+    color: #FFDF64;
+    margin-left: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.bouton-retour {
+    padding: 0.8rem 1.8rem;
+    background: rgba(255, 223, 100, 0.9);
+    backdrop-filter: blur(10px);
+    color: #2D5016;
+    text-decoration: none;
+    
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bouton-retour:hover {
+    background: rgba(255, 223, 100, 1);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.zone-canvas {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+
+.zone-canvas::after {
+    content: '';
+    position: absolute;
+    top: -123px; 
+
+    right: calc(50% - 400px + 150px);
+    width: 230px;
+
+    height: 180px;
+    background: url('../assets/singe-adosse.png') center/contain no-repeat;
+    pointer-events: none;
+    z-index: 10;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+ 
+}
+
+
+/* style du panier qui se remplit de + en + */
+.panier-container {
+    position: absolute;
+    left: -250px;
+    bottom: -60px;
+    width: 300px;
+    height: auto;
+    opacity: 0;
+
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+.panier-container.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.panier-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+
+}
+
+#canvas {
+    background: linear-gradient(135deg,rgba(255, 255, 255, 0.25) 0%,rgba(255, 248, 220, 0.15) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+   
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+   
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5),
+        0 0 40px rgba(205, 231, 127, 0.1);
+    
+    cursor: url("../assets/cible.png") 32 32, crosshair; ;
+}
+
+
+.info-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1rem;
+    margin: 2rem auto;
+
+    max-width: 800px;
+    padding: 1.5rem;
+
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.info-item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+
+    padding: 1rem 0.5rem;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.info-item:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.info-icon {
+    width: 55px;
+    height: 55px;
+
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.info-item:hover .info-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+.info-item span {
+    font-size: 0.85rem;
+    color: #2D5016;
+    font-weight: 500;
+    text-align: center;
+
+    line-height: 1.4;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+.info-item span strong {
+    display: block;
+    font-size: 1rem;
+    color: #2D5016;
+    font-weight: 700;
+    margin-top: 0.2rem;
+}
+
+.controls{
+    text-align: center;
+    font-size: 0.95rem;
+    color: #FFFFFF;
+    margin-top: 1.5rem;
+
+    font-weight: 500;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    background: rgba(45, 80, 22, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 600px;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.controls strong{
+    color: #FFDF64;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: rgba(255, 223, 100, 0.25);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 223, 100, 0.3);
+}
+
+
+.footer-credits{
+    text-align: center;
+    padding: 2rem 1rem;
+
+    background: rgba(45, 80, 22, 0.4);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 3rem;
+}
+
+.footer-credits p{
+    font-size: 0.8rem;
+    color: #FFFFFF;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.footer-credits a {
+    color: #FFDF64;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-credits a:hover {
+    text-decoration: underline;
+}
+
+
+@media (max-width: 900px) {
+    .titre-principal {
+        font-size: 2.5rem;
+    }
+
+    
+    #canvas {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .info-panel {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    
+    .info-item {
+        flex-direction: row;
+        padding: 1rem;
+    }
+
+}

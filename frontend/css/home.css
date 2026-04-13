@@ -203,37 +203,3 @@
   .pin.amazon{ left: 39%; top: -30px; }
   .pin.sahara{ left: 50%; top: -115px; }
 }
-
-.pwd-field{
-  position: relative;
-  display: block;
-}
-
-.pwd-field input{
-  width: 100%;
-  padding-right: 44px;
-}
-
-.pwd-toggle{
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 6px;
-  line-height: 1;
-  font-size: 18px;
-  color: rgba(0,0,0,.65);
-}
-
-.pwd-toggle:hover{
-  color: rgba(0,0,0,.9);
-}
-
-.pwd-toggle:focus-visible{
-  outline: 2px solid rgba(255,255,255,.6);
-  outline-offset: 3px;
-  border-radius: 8px;
-}

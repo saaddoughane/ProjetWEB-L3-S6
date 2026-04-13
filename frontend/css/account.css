@@ -163,27 +163,3 @@
   color: rgba(0,0,0,.85);
   outline: none;
 }
-
-/* Eye toggle (account only) */
-.pwd-field{
-  position: relative;
-  display: block;
-}
-
-.pwd-field input{
-  padding-right: 44px;
-}
-
-.pwd-toggle{
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 6px;
-  line-height: 1;
-  font-size: 18px;
-  color: rgba(0,0,0,.65);
-}
