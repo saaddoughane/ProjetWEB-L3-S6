@@ -17,8 +17,8 @@
   }
 
   function setSessionUser(email) {
-    sessionStorage.setItem(
-      SESSION_KEY_LOCAL,
+    localStorage.setItem(
+      "gw_session",
       JSON.stringify({ email, loginAt: new Date().toISOString() })
     );
   }
