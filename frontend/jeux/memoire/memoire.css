@@ -256,7 +256,6 @@ body {
     max-width: 900px;
 }
  
-
  
 .carte {
     aspect-ratio: 3/4;
@@ -264,18 +263,19 @@ body {
     cursor: pointer;
     transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.3));
+    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
 }
- 
+
+
 .grille-cartes.niveau-3 .carte {
     aspect-ratio: 1;
 }
  
 .carte:hover:not(.retournee):not(.trouvee) {
     transform: translateY(-6px) scale(1.03);
-    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.4));
+    box-shadow: 0 12px 24px rgba(0,0,0,0.4);
 }
- 
+
 .carte.retournee {
     transform: rotateY(180deg);
 }

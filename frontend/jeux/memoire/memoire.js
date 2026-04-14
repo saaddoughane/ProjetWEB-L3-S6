@@ -1,7 +1,7 @@
 
 const NIVEAUX = [
 
-    
+
     { id: 1, nbPaires: 4,  cols: 4, classe: 'niveau-1' },
     { id: 2, nbPaires: 6,  cols: 4, classe: 'niveau-2' },
     { id: 3, nbPaires: 10, cols: 5, classe: 'niveau-3' }
@@ -9,17 +9,17 @@ const NIVEAUX = [
 
 const IMAGES_CARTES = [
 
-
-    './images/ours.png',
-    './images/phoque.png',
-    './images/pingouin.png',
-    './images/renard.png',
+    './images/ours-polaire.png',
     './images/baleine.png',
-    './images/chouette.png',
-    './images/caribou.png',
-    './images/morse.png',
-    './images/loup.png',
-    './images/lapin.png'
+    './images/elf.png',
+    './images/esquimau.png',
+    './images/igloo.png',
+    './images/otarie.png',
+    './images/pine-tree.png',
+    './images/poisson.png',
+    './images/renne.png',
+    './images/pingouin.png'
+    
 ];
 
 
