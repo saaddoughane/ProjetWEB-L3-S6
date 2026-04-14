@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
     function checkSelfCollision() {
-        const ignoreSegments = snake.spacing * 2;
+        const ignoreSegments = snake.spacing * 3;
 
         for (let i = ignoreSegments; i < snake.trail.length; i += snake.spacing) {
             const part = snake.trail[i];
@@ -1037,6 +1037,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("touchstart", (e) => {
       const touch = e.touches[0];
       if (!touch) return;
+      onSpace();
       onCanvasClick(touch);
     }, { passive: true });
 

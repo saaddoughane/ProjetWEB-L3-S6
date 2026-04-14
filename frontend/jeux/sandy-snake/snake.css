@@ -109,7 +109,7 @@ body::before {
 .joystick {
   position: absolute;
   left: 18px;
-  bottom: 18px;
+  bottom: -30px;
   width: 120px;
   height: 120px;
   display: none;
@@ -119,8 +119,8 @@ body::before {
 }
 
 .joystick-base {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   border-radius: 50%;
   background: rgba(255,255,255,0.18);
   border: 2px solid rgba(255,255,255,0.30);
@@ -129,8 +129,8 @@ body::before {
 }
 
 .joystick-knob {
-  width: 48px;
-  height: 48px;
+  width: 50%;
+  height: 50%;
   border-radius: 50%;
   background: rgba(255, 238, 200, 0.92);
   border: 2px solid rgba(255,255,255,0.65);
@@ -234,6 +234,10 @@ body::before {
 .footer-credits p {
   font-size: 0.9rem;
   color: #fff3d7;
+}
+
+#canvas {
+  cursor: url("./assets/flute.png") 16 16, auto;
 }
 
 @media (max-width: 900px) {
