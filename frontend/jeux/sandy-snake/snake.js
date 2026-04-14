@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
     function checkSelfCollision() {
-        const ignoreSegments = snake.bodyCount * snake.spacing * 0.6;
+        const ignoreSegments = snake.spacing * 2;
 
         for (let i = ignoreSegments; i < snake.trail.length; i += snake.spacing) {
             const part = snake.trail[i];
@@ -324,14 +324,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const d = dist(snake.x, snake.y, part.x, part.y);
 
-            // seuil plus strict
-            if (d < snake.headRadius * 0.75) {
+            if (d < snake.headRadius * 0.8) {
             saveRunIfNeeded();
             gameState = GAME.GAME_OVER;
             return;
             }
         }
     }
+
   function checkScarabCollision() {
     if (dist(snake.x, snake.y, scarab.x, scarab.y) < snake.headRadius + scarab.radius) {
       score += 1;
@@ -433,7 +433,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // dunes
     ctx.fillStyle = "rgba(255, 230, 170, 0.26)";
     for (let i = 0; i < 4; i++) {
       ctx.beginPath();
@@ -448,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
-    // sun
     ctx.beginPath();
     ctx.fillStyle = "rgba(255, 244, 196, 0.55)";
     ctx.arc(canvas.width - 120, 90, 48, 0, Math.PI * 2);
@@ -497,7 +495,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
-    // tête
     ctx.beginPath();
     ctx.fillStyle = "#325a21";
     ctx.ellipse(cx + 28, cy, 28, 20, 0, 0, Math.PI * 2);
@@ -687,7 +684,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.translate(snake.x, snake.y);
     ctx.rotate(snake.angle);
 
-    // tête
     ctx.beginPath();
     ctx.fillStyle = "#375f24";
     ctx.ellipse(0, 0, 20, 15, 0, 0, Math.PI * 2);
@@ -710,7 +706,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.arc(13, -4, 1.8, 0, Math.PI * 2);
     ctx.fill();
 
-    // langue
     ctx.strokeStyle = "#d45544";
     ctx.lineWidth = 2.2;
     ctx.beginPath();
