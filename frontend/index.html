@@ -36,7 +36,7 @@
 <main>
   <section class="hero container">
     <h1>BIENVENUE DANS<br/>GAME WORLD</h1>
-    <p>
+    <p class="hero-consigne">
       Choisis une région, joue au défi et bats toi contre les maîtres de l'univers !
     </p>
 
@@ -57,35 +57,59 @@
   </section>
 
   <section class="pins-stage" aria-label="Choose a region">
-    <button class="pin alaska" type="button" aria-label="Memory — Alaska">
-      <div class="drop"></div>
+   
+   
+    <div class="pin-wrapper alaska">
+      <button class="pin" type="button" aria-label="Mémoire Arctique — Alaska">
+        <div class="drop pulsing"></div>
+        <div class="pin-label">ALASKA</div>
+      </button>
       <div class="pin-card">
-        <div class="thumb">Alaska — Mémoire Arctique</div>
-        <h3>Jeu de cartes mémoire</h3>
-        <p>Trouve rapidement les paires. Ne te perds pas dans la tempête de neige.</p>
-        <a href="jeux/memoire/memoire.html">Jouer →</a>
+        <div class="pin-card-preview">
+          <img src="assets/preview-memoire.png" alt="Mémoire Arctique" />
+        </div>
+        <div class="pin-card-content">
+          <h3>Mémoire Arctique</h3>
+          <p>Trouve les paires dans la tempête de neige</p>
+          <a href="jeux/memoire/memoire.html" class="pin-btn">Jouer →</a>
+        </div>
       </div>
-    </button>
+    </div>
 
-    <button class="pin amazon" type="button" aria-label="Typing — Amazon">
-      <div class="drop"></div>
+    <div class="pin-wrapper amazon">
+      <button class="pin" type="button" aria-label="Chasse Bananes — Amazonie">
+        <div class="drop pulsing"></div>
+        <div class="pin-label">AMAZONIE</div>
+      </button>
       <div class="pin-card">
-        <div class="thumb">Amazonie — Chasse Bananes</div>
-        <h3>Jeu de chasse</h3>
-        <p>Click quickly and accurately to move forward.</p>
-        <a href="jeux/chasse-banane/chasse.html">Jouer →</a>
+        <div class="pin-card-preview">
+          <img src="assets/preview-chasse.png" alt="Chasse Bananes" />
+        </div>
+        <div class="pin-card-content">
+          <h3>Chasse Bananes</h3>
+          <p>Attrape les bananes dans la jungle</p>
+          <a href="jeux/chasse-banane/chasse.html" class="pin-btn">Jouer →</a>
+        </div>
       </div>
-    </button>
+    </div>
 
-    <button class="pin sahara" type="button" aria-label="Geo — Sahara">
-      <div class="drop"></div>
+    <div class="pin-wrapper sahara">
+      <button class="pin" type="button" aria-label="Snake du Désert — Sahara">
+        <div class="drop pulsing"></div>
+        <div class="pin-label">SAHARA</div>
+      </button>
       <div class="pin-card">
-        <div class="thumb">Sahara — Charming Dunes</div>
-        <h3>Jeu de serpent</h3>
-        <p>Guess your location. Closer means more points.</p>
-        <a href="jeux/sandy-snake/snake.html">Jouer →</a>
+        <div class="pin-card-preview">
+          <img src="assets/preview-snake.png" alt="Snake du Désert" />
+        </div>
+        <div class="pin-card-content">
+          <h3>Charming Dunes</h3>
+          <p>Survie dans les dunes brûlantes</p>
+          <a href="jeux/sandy-snake/snake.html" class="pin-btn">Jouer →</a>
+        </div>
       </div>
-    </button>
+    </div>
+
   </section>
 </main>
 
