@@ -15,10 +15,10 @@ const sons = {
     victoire: new Audio('./sounds/victoire.ogg')
 };
 
-sons.flip.volume= 0.5;
+sons.flip.volume= 1.0;
 sons.paire.volume= 0.7;
-sons.erreur.volume= 0.4;
-sons.victoire.volume = 0.6;
+sons.erreur.volume= 0.1;
+sons.victoire.volume = 1.0;
 
 const IMAGES_CARTES = [
 
@@ -57,6 +57,26 @@ const elTemps       = document.getElementById('temps');
 const elCoupsFinaux = document.getElementById('coupsFinaux');
 const elTempsFinaux = document.getElementById('tempsFinaux');
 
+
+
+const musiqueAmbiance = document.getElementById('musiqueAmbiance');
+
+
+musiqueAmbiance.volume = 0.09; 
+
+
+function demarrerMusique() {
+
+    musiqueAmbiance.play().catch(err => {
+        console.log("La musique nécessite une interaction utilisateur");
+    });
+}
+
+
+function arreterMusique() {
+    musiqueAmbiance.pause();
+    musiqueAmbiance.currentTime = 0;
+}
 
 function melangerTableau(arr) {
     const a = [...arr];
@@ -239,7 +259,9 @@ function afficherVictoire() {
 // Jouer
 document.getElementById('btnJouer').addEventListener('click', () => {
     niveauIndex = 0;
+    demarrerMusique();
     initNiveau();
+
 });
 
 // Titre → retour accueil
