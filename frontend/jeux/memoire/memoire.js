@@ -64,6 +64,13 @@ const musiqueAmbiance = document.getElementById('musiqueAmbiance');
 
 musiqueAmbiance.volume = 0.09; 
 
+(function checkAuth() {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+        window.location.href = "../../auth.html";
+    }
+})();
 
 function demarrerMusique() {
 

@@ -104,7 +104,6 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// ===== SAVE SCORE GLOBAL =====
 const SCORES_KEY = "gw_scores";
 
 function saveScore(game, score) {
@@ -124,6 +123,21 @@ function saveScore(game, score) {
 
   console.log("Score sauvegardé :", game, score);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const user = getCurrentUser();
+  const heroBtn = document.getElementById("heroAccountBtn");
+
+  if (!heroBtn) return;
+
+  if (user && user.email) {
+    heroBtn.textContent = "Mon compte";
+    heroBtn.href = `${basePath()}account.html`;
+  } else {
+    heroBtn.textContent = "Connexion";
+    heroBtn.href = `${basePath()}auth.html`;
+  }
+});
 
 setNav();
 attachLogout();
