@@ -13,6 +13,8 @@ let panierImg;
 
 const SESSION_KEY = "gw_session";
 
+
+//vérification de la session utilisateur 
 let session = null;
 
 try {
@@ -21,12 +23,19 @@ try {
   session = null;
 }
 
+//si pas de session, redirige vers la page de connexion 
 if (!session) {
   window.location.href = "../../auth.html";
 } else {
 bootstrapBananaGame();
 }
 
+
+/**
+ * fonction principale qui contient toute la logique du jeu 
+ * démarre après la vérification de la session user 
+ * 
+ */
 function bootstrapBananaGame() {
 
 /* gestion des différents niveaux du jeu demandés 1,2 et 3*/
@@ -43,6 +52,12 @@ let hiScores = [];
 
 window.onload = init; //initialisation lorsque la page charge
 
+
+/**
+ * 
+ * Initialise le jeu au chargement de la page 
+ * Charge les images de manière asynchrone puis démarre
+ */
 async function init() {
     canvas = document.querySelector("#canvas");
     ctx = canvas.getContext("2d");
@@ -62,7 +77,7 @@ async function init() {
     initListeners(canvas);
     
     try {
-      
+        //attend que toutes les images soient chargées
         await loadMenuImages();
         await Banana.loadImages();
     
@@ -76,6 +91,11 @@ async function init() {
     }
 }
 
+/**
+ * Charge l'image du panier de manière asynchrone
+ * @returns Promise qui se résout quand l'image est prête
+ * 
+ */
 function loadMenuImages() {
 
     return new Promise((resolve, reject) => {
@@ -105,6 +125,8 @@ function loadMenuImages() {
 }
 
 //fonction pour démarrer une nouvelle partie 
+//réinitialise tous les compteurs et lance la game loop 
+
 function startGame() {
     gameState = "MENU";
     level = 1;
@@ -122,6 +144,13 @@ function startGame() {
     requestAnimationFrame(gameLoop);
 }
 
+
+/**
+ * boucle principale du jeu (appelée 60x/ sec)
+ * gère les différents états du jeu et appelle les fonctions appropriées 
+ * 
+ * @param {*} time 
+ */
 function gameLoop(time){
 
     currentTime = time;
@@ -165,6 +194,11 @@ function gameLoop(time){
     requestAnimationFrame(gameLoop);
 }
 
+
+/**
+ * Met à jour la logique du menu
+ * Détecte les inputs pour démarrer ou voir les scores
+ */
 function updateMenu() {
 
 
@@ -185,6 +219,12 @@ function updateMenu() {
     }
 }
 
+/**
+ * Met à jour la logique du jeu pendant la partie 
+ * Génère les bananes, gère les collisions et vérifie l'objectif 
+ * 
+ * @param {} time 
+ */
 function updateGame(time) {
 
     const config = LEVEL_CONFIG[level];
@@ -199,14 +239,17 @@ function updateGame(time) {
         }
     }
     
+    //met à jour toutes les bananes 
     for (let i = bananas.length - 1; i >= 0; i--) {
         let banana = bananas[i];
         banana.update();
         
-        if (banana.isOutOfScreen(canvas.height)) {//si l'on rate la banane ça entraine des pénalités
+        //si l'on rate la banane ça entraine des pénalités
+        if (banana.isOutOfScreen(canvas.height)) {
             bananas.splice(i, 1);
             bananasMissed++;
             
+            //perd 1 vie toutes les 5 bananes ratées 
             if (bananasMissed % 5 === 0 && bananasMissed > 0) {
                 lives--;
                 
@@ -221,6 +264,8 @@ function updateGame(time) {
         }
     }
     
+    //met à jour toutes les particules 
+
     for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update();
 
@@ -230,6 +275,7 @@ function updateGame(time) {
         }
     }
     
+    //vérifie les clics sur les bananes 
     if (inputStates.mouseClicked) {
         inputStates.mouseClicked = false;
         checkBananaClick(inputStates.mouseX, inputStates.mouseY);
@@ -243,6 +289,11 @@ function updateGame(time) {
     }
 }
 
+
+/**
+ * Met à jour la logique de l'écran de niveau terminé
+ * passe au niveau suivant ou affiche la victoire 
+ */
 function updateLevelComplete() {
     if (inputStates.space) {
         inputStates.space = false;
@@ -263,6 +314,11 @@ function updateLevelComplete() {
     }
 }
 
+
+/**
+ * met à jour la logique de l'écran game over
+ * permet de rejouer / voir les scores
+ */
 function updateGameOver() {
     if (inputStates.space) {
         inputStates.space = false;
@@ -276,6 +332,11 @@ function updateGameOver() {
     }
 }
 
+
+/**
+ * met à jour la logique de l'écran des meilleurs scores
+ * retour au menu sur ESP ou ESC
+ */
 function updateHiScores() {
     if (inputStates.space || inputStates.escape) {
         inputStates.space = false;
@@ -285,6 +346,11 @@ function updateHiScores() {
     }
 }
 
+/**
+ * initialise un niveau 
+ * réinitialise les tableaux et compteurs pour le nouveau niveau 
+ * @param {*} levelNumber 
+ */
 function initLevel(levelNumber) {
    
     bananas = [];
@@ -295,7 +361,11 @@ function initLevel(levelNumber) {
     updatePanierHTML(0);
 }
 
-/* fonction qui génère une banane de manière aléatoire*/ 
+/* fonction qui génère une banane de manière aléatoire
+    avec type et position
+
+    Applique le multiplicateur de vitesse du niveau
+*/ 
 
 function spawnBanana(speedMultiplier) {
     const x = Math.random() * (canvas.width - 60) + 30;
@@ -306,12 +376,11 @@ function spawnBanana(speedMultiplier) {
 
     //probabilité d'apparition des types de fruits 
 
-    if (random < 0.4) type = 'yellow'; //banane jaune
+    if (random < 0.4) type = 'yellow'; //banane jaune 40%
     
-    else if (random < 0.7) type = 'green';//banane verte
-    else if (random < 0.9) type = 'bunch'; //mix de bananes
-
-    else type = 'pineapple';//ananas
+    else if (random < 0.7) type = 'green';//banane verte 30%
+    else if (random < 0.9) type = 'bunch'; //mix de bananes 20%
+    else type = 'pineapple';//ananas 10%
     
     const banana = new Banana(x, y, type);
     banana.speedY *= speedMultiplier;
@@ -320,6 +389,7 @@ function spawnBanana(speedMultiplier) {
 }
 
 /* fonction qui vérifie si une banane a bien été cliquée*/ 
+/* utilise la méthode containsPoint() de la classe Banana */
 function checkBananaClick(mouseX, mouseY) {
 
     for (let i = bananas.length - 1; i >= 0; i--) {
@@ -341,6 +411,12 @@ function checkBananaClick(mouseX, mouseY) {
     }
 }
 
+/**
+ * Créer une explosion de particules quand fruit cliqué
+ * @param {*} x 
+ * @param {*} y 
+ * @param {*} type 
+ */
 /* selon le type de fruit, l'animation des fruits diffèrent */ 
 
 function createParticleExplosion(x, y, type) {
@@ -373,6 +449,13 @@ function createParticleExplosion(x, y, type) {
     }
 }
 
+
+/**
+ * Met à jour l'image du panier selon le nb de bananes attrapées
+ * le panier se remplit petit à petit (panier0 à panier4)
+ * @param {*} count 
+ * @returns 
+ */
 function updatePanierHTML(count) {
     const panierElement = document.getElementById('panier-img');
    
@@ -392,17 +475,22 @@ function updatePanierHTML(count) {
     panierElement.src = `./assets/panier${panierIndex}.png`;
 }
 
+//affiche le panier avec classe CSS "visible"
 function showPanier() {
     const container = document.querySelector('.panier-container');
     
     if (container) container.classList.add('visible');
 }
 
+//cache le panier en retirant la classe CSS "visible"
 function hidePanier() {
     const container = document.querySelector('.panier-container');
     if (container) container.classList.remove('visible');
 }
 
+/**
+ * Dessine l'écran du menu principal 
+ */
 function drawMenu() {
     ctx.save();
     
@@ -417,7 +505,7 @@ function drawMenu() {
     
 
     if (panierImg && panierImg.complete) {
-        const panierSize = 250; // AGRANDI de 200 à 250
+        const panierSize = 250; 
         const panierX = canvas.width / 2 - panierSize / 2;
         const panierY = 110;
         ctx.drawImage(panierImg, panierX, panierY, panierSize, panierSize);
@@ -469,6 +557,9 @@ function drawMenu() {
     ctx.restore();
 }
 
+/**
+ * Dessine l'écran de jeu (bananes, particules, HUD)
+ */
 function drawGame() {
     ctx.save();
     bananas.forEach(banana => banana.draw(ctx));
@@ -477,6 +568,12 @@ function drawGame() {
 
     ctx.restore();
 }
+
+
+/**
+ * Dessine l'interface de jeu de haut avec la barre contenant :
+ * les scores, niveaux, vie, objectif 
+ */
 
 function drawHUD() {
     ctx.save();
@@ -505,6 +602,9 @@ function drawHUD() {
 
 }
 
+/**
+ * Dessine l'écran de niveau terminé 
+ */
 function drawLevelComplete() {
     ctx.save();
     
@@ -567,6 +667,9 @@ function drawLevelComplete() {
     ctx.restore();
 }
 
+/**
+ * Dessine l'écran game over 
+ */
 function drawGameOver() {
     ctx.save();
     
@@ -621,7 +724,9 @@ function drawGameOver() {
     ctx.restore();
 }
 
-
+/**
+ * Dessine l'écran des meilleurs scores
+ */
 function drawHiScores() {
     ctx.save();
     
@@ -679,6 +784,9 @@ function drawHiScores() {
     ctx.restore();
 }
 
+/**
+ * Charge les meilleurs scores depuis localStorage
+ */
 function loadHiScores() {
     const saved = localStorage.getItem('chasseAmazonienneHiScores');
    
@@ -687,6 +795,11 @@ function loadHiScores() {
     }
 }
 
+/**
+ * Sauvegarde un nouveau score dans les meilleurs scores
+ * garde seulement les 5 meilleurs 
+ * @param {*} newScore 
+ */
 function saveHiScore(newScore) {
     const date = new Date().toLocaleDateString('fr-FR');
     hiScores.push({ score: newScore, date: date });
@@ -696,6 +809,9 @@ function saveHiScore(newScore) {
     localStorage.setItem('chasseAmazonienneHiScores', JSON.stringify(hiScores));
 }
 
+/**
+ * dessine l'écran de victoire totale (tous les niveaux terminés)
+ */
 function drawVictory() {
 
     ctx.save();
@@ -720,7 +836,9 @@ function drawVictory() {
     ctx.restore();
 }
 
-
+/**
+ * Met à jour la logique de l'écran de victoire
+ */
 function updateVictory() {
     if (inputStates.space) {
         inputStates.space = false;
@@ -728,6 +846,7 @@ function updateVictory() {
     }
 }
 
+//permet de mettre le son pop quand une banane est attrapée
 function playPop() {
     const pop = new Audio('./assets/sounds/pop-sound.mp3');
     pop.volume = 0.6;
