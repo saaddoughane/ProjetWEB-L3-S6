@@ -386,8 +386,8 @@ Nous avons utilisé Claude AI et ChatGPT comme outils pour :
 
 ## 📧 Contact
 
-**Acile EL DADA** : acile.eldada@etu.univ-cotedazur.fr  
 **Saadeddine DOUGHANE** : saadeddine.doughane@etu.univ-cotedazur.fr
+**Acile EL DADA** : acile.eldada@etu.univ-cotedazur.fr  
 
 ---
 
