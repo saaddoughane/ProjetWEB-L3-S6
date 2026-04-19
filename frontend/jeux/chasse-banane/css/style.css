@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+/**
+ * Fond principal du jeu avec image jungle
+ * Utilise une image de fond fixe pour l'immersion
+ */
 body {
     font-family: 'Fredoka', 'Montserrat', sans-serif;
     min-height: 100vh;
@@ -18,6 +22,9 @@ body {
 }
 
 
+/**
+ * Effet de pulsation subtil sur tout l'écran
+ */
 body::before {
     content: '';
     position: fixed;
@@ -112,6 +119,10 @@ body::before {
 }
 
 
+/**
+ * Singe adossé à droite du canvas
+ * Positionné en absolute avec pseudo-élément ::after
+ */
 .zone-canvas::after {
     content: '';
     position: absolute;
@@ -130,6 +141,10 @@ body::before {
 
 
 /* style du panier qui se remplit de + en + */
+/**
+ * Conteneur du panier qui se remplit progressivement
+ * Apparaît avec animation quand le jeu démarre
+ */
 .panier-container {
     position: absolute;
     left: -250px;
@@ -144,6 +159,7 @@ body::before {
     filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
 }
 
+/* Classe ajoutée par JavaScript pour afficher le panier */
 .panier-container.visible {
     opacity: 1;
     transform: scale(1);
@@ -157,10 +173,16 @@ body::before {
 
 }
 
+
+/**
+ * Canvas du jeu avec effet glassmorphism
+ * Utilise backdrop-filter pour un effet de verre dépoli
+ */
 #canvas {
     background: linear-gradient(135deg,rgba(255, 255, 255, 0.25) 0%,rgba(255, 248, 220, 0.15) 100%);
     backdrop-filter: blur(20px) saturate(180%);
    
+    /* Effet glassmorphism (verre dépoli) */
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 30px;
     border: 1px solid rgba(255, 255, 255, 0.4);
@@ -170,10 +192,16 @@ body::before {
         inset 0 1px 2px rgba(255, 255, 255, 0.5),
         0 0 40px rgba(205, 231, 127, 0.1);
     
+
+    /* Curseur personnalisé (cible) */
     cursor: url("../assets/cible.png") 32 32, crosshair; ;
 }
 
 
+/**
+ * Panneau d'informations du bas avec (banane jaune, verte, etc.)
+ * Effet glassmorphism pour cohérence visuelle
+ */
 .info-panel {
     display: flex;
     justify-content: space-between;
@@ -184,6 +212,7 @@ body::before {
     max-width: 800px;
     padding: 1.5rem;
 
+    /* Glassmorphism */
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(15px) saturate(180%);
     -webkit-backdrop-filter: blur(15px) saturate(180%);
@@ -210,6 +239,7 @@ body::before {
     transition: all 0.3s ease;
 }
 
+/*animation au survol */
 .info-item:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: translateY(-5px);
@@ -303,6 +333,10 @@ body::before {
 }
 
 
+/**
+ * Media query pour mobile
+ * Adaptation responsive de l'interface
+ */
 @media (max-width: 900px) {
     .titre-principal {
         font-size: 2.5rem;
@@ -314,12 +348,13 @@ body::before {
         height: auto;
     }
     
+     /* Passe en colonne sur mobile */
     .info-panel {
         flex-direction: column;
         gap: 0.5rem;
     }
 
-    
+     /* Passe en ligne sur mobile */
     .info-item {
         flex-direction: row;
         padding: 1rem;

@@ -1,4 +1,8 @@
+
+//configuration du jeu 
 const MEMORY_SESSION_KEY = "gw_session";
+
+//configuration des 3 niveaux de difficulté
 const NIVEAUX = [
 
 
@@ -7,7 +11,7 @@ const NIVEAUX = [
     { id: 3, nbPaires: 10, cols: 5, classe: 'niveau-3' }
 ];
 
-
+//chargement et configuration des sons 
 const sons = {
     flip:     new Audio('./sounds/flip.wav'),
     paire:    new Audio('./sounds/paire.wav'),
@@ -36,16 +40,16 @@ const IMAGES_CARTES = [
 ];
 
 
-let niveauIndex      = 0;
-let cartesRetournees = [];
-let cartesTrouvees   = 0;
-let coups            = 0;
-let secondes         = 0;
-let timerInterval    = null;
-let peutCliquer      = true;
-let niveauStats      = [];
-let memoryRunSaved   = false;
-let memoryRunCompleted = false;
+let niveauIndex = 0;           // Niveau actuel (0, 1, ou 2)
+let cartesRetournees = [];     // Tableau des 2 cartes retournées
+let cartesTrouvees = 0;        // Nombre total de cartes trouvées
+let coups = 0;                 // Nombre de coups effectués
+let secondes = 0;              // Temps écoulé en secondes
+let timerInterval = null;      // Intervalle du chronomètre
+let peutCliquer = true;        // Verrou anti-spam (mutex)
+let niveauStats = [];          // Statistiques de chaque niveau
+let memoryRunSaved = false;    // Score déjà sauvegardé ?
+let memoryRunCompleted = false; // Tous les niveaux terminés ?
 
 
 const pageAccueil   = document.getElementById('pageAccueil');
@@ -64,9 +68,11 @@ const elTempsFinaux = document.getElementById('tempsFinaux');
 
 const musiqueAmbiance = document.getElementById('musiqueAmbiance');
 
-
+//son musique de fond 
 musiqueAmbiance.volume = 0.09; 
 
+
+//vérification session utilisateur 
 let currentUser = null;
 
 try {
@@ -75,40 +81,67 @@ try {
     currentUser = null;
 }
 
+//si pas de session : redirige vers page de connexion 
 if (!currentUser) {
     window.location.href = "../../auth.html";
 } else {
     bootstrapMemoryGame();
 }
 
+
+/**
+ * Fonction principale qui contient toute la logique du jeu
+ * démarre après vérification de la session utilisateur 
+ */
 function bootstrapMemoryGame() {
 
-function demarrerMusique() {
 
-    musiqueAmbiance.play().catch(err => {
-        console.log("La musique nécessite une interaction utilisateur");
-    });
-}
+    function demarrerMusique() {
 
-
-function arreterMusique() {
-    musiqueAmbiance.pause();
-    musiqueAmbiance.currentTime = 0;
-}
-
-function melangerTableau(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+        musiqueAmbiance.play().catch(err => {
+            console.log("La musique nécessite une interaction utilisateur");
+        });
     }
-    return a;
-}
 
+
+    function arreterMusique() {
+        musiqueAmbiance.pause();
+        musiqueAmbiance.currentTime = 0;
+    }
+
+    /**
+     * Mélange aléatoirement un tableau (algorithme Fisher-Yates)
+     * @param {Array} arr - Tableau à mélanger
+     * @returns {Array} Nouveau tableau mélangé
+     */
+    function melangerTableau(arr) {
+        const a = [...arr]; //copie du tableau 
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+
+/**
+ * Formate le temps en format MM:SS
+ * @param {*} s 
+ * @returns 
+ */    
 function formaterTemps(s) {
     return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
 }
 
+
+/**
+ * Calcule le score d'un niveau (max 500 points)
+ * Formule: bonus niveau + bonus temps - pénalité coups
+ * @param {number} niveau - Numéro du niveau (1, 2 ou 3)
+ * @param {number} coupsActuels - Nombre de coups effectués
+ * @param {number} secondesActuelles - Temps écoulé en secondes
+ * @returns {number} Score du niveau (0-500)
+ */
 function calculerScoreMemoire(niveau, coupsActuels, secondesActuelles) {
     const bonusNiveau = Number(niveau) * 100;
     const bonusTemps = Math.max(0, 200 - Number(secondesActuelles));
@@ -117,12 +150,18 @@ function calculerScoreMemoire(niveau, coupsActuels, secondesActuelles) {
     return Math.max(0, Math.min(500, Math.round(bonusNiveau + bonusTemps - penalite)));
 }
 
+//réinitialise les statistiques de la partie en cours 
 function resetMemoryRun() {
     niveauStats = [];
     memoryRunSaved = false;
     memoryRunCompleted = false;
 }
 
+
+/**
+ * Enregistre les résultats du niveau actuel 
+ * stocke les coups, le temps et score dans niveauStats
+ */
 function enregistrerResultatNiveau() {
     const niveau = NIVEAUX[niveauIndex].id;
 
@@ -134,6 +173,11 @@ function enregistrerResultatNiveau() {
     };
 }
 
+
+/**
+ * Construit un résumé de toute la partie (tous les niveaux)
+ * @returns 
+ */
 function construireResumeRun() {
     const niveauxCompletes = niveauStats.filter(Boolean);
 
@@ -146,9 +190,15 @@ function construireResumeRun() {
     };
 }
 
+
+/**
+ * Sauvegarde le score total si la partie est terminée
+ * utilise la fonction saveScore() pour enregistrer dans le systeme global
+ * @returns 
+ */
 function saveMemoryRunIfNeeded() {
-    if (memoryRunSaved) return;
-    if (!memoryRunCompleted) return;
+    if (memoryRunSaved) return; //déja sauvegardé 
+    if (!memoryRunCompleted) return; // pas encore terminé 
 
     const resume = construireResumeRun();
     if (resume.completedLevels === 0 || resume.score <= 0) return;
@@ -160,6 +210,11 @@ function saveMemoryRunIfNeeded() {
     }
 }
 
+
+/**
+ * affiche la page d'accueil 
+ * cache le jeu et les modales, arrete le timer 
+ */
 function afficherAccueil() {
     saveMemoryRunIfNeeded();
 
@@ -172,19 +227,34 @@ function afficherAccueil() {
 }
 
 
+/**
+ * Initialise un niveau
+ * - Sélectionne les images selon le nombre de paires
+ * - Mélange et crée les cartes dans le DOM
+ * - Lance le chronomètre
+ * - Réinitialise les compteurs
+ * 
+ */
 function initNiveau() {
 
 
-    const niv    = NIVEAUX[niveauIndex];
-    const paires = IMAGES_CARTES.slice(0, niv.nbPaires);
-    const jeu    = melangerTableau([...paires, ...paires]);
+    const niv = NIVEAUX[niveauIndex]; 
 
-    coups          = 0;
-    secondes       = 0;
+    //selectionne n paires
+    const paires = IMAGES_CARTES.slice(0, niv.nbPaires);
+    
+    // double + mélange 
+    const jeu = melangerTableau([...paires, ...paires]);
+
+    //reinitialisation des variables
+    coups = 0;
+    secondes = 0;
     cartesTrouvees = 0;
     cartesRetournees = [];
-    peutCliquer    = true;
+    peutCliquer= true;
 
+
+    //mise a jour de l'interface 
     elNiveau.textContent = niv.id;
     elCoups.textContent  = '0';
     elTemps.textContent  = '00:00';
@@ -195,17 +265,20 @@ function initNiveau() {
     modalVictoire.classList.remove('active');
     modalFin.classList.remove('active');
 
-    // Construire la grille
+    // Construire la grille de cartes 
     grilleCartes.innerHTML = '';
     grilleCartes.className = `grille-cartes ${niv.classe}`;
 
+    //création dynamique de chaque carte 
     jeu.forEach(src => {
         const carte = document.createElement('div');
         carte.classList.add('carte');
 
+        //face avant (dos de la carte)
         const faceAvant = document.createElement('div');
         faceAvant.classList.add('face', 'face-avant');
 
+        //face arrière (image de l'animal)
         const faceArriere = document.createElement('div');
         faceArriere.classList.add('face', 'face-arriere');
 
@@ -216,13 +289,15 @@ function initNiveau() {
 
         carte.appendChild(faceAvant);
         carte.appendChild(faceArriere);
+        // Stocke l'image dans data-src pour comparaison
         carte.dataset.src = src;
 
+         // Événement de clic
         carte.addEventListener('click', () => clicCarte(carte));
         grilleCartes.appendChild(carte);
     });
 
-    // Timer
+    // LANCEMENT DU CHRONOMÈTRE
     clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
@@ -232,31 +307,40 @@ function initNiveau() {
     }, 1000);
 }
 
-
+/**
+ * Gère le clic sur une carte
+ * - Vérifie le verrou peutCliquer (mutex)
+ * - Retourne la carte
+ * - Compare les 2 cartes retournées
+ * - Valide ou invalide la paire
+ */
 function clicCarte(carte) {
 
-    if (!peutCliquer) return;
-    if (carte.classList.contains('retournee')) return;
-    if (carte.classList.contains('trouvee')) return;
-    if (cartesRetournees.length >= 2) return;
+    if (!peutCliquer) return; //verrou actif : ignore
+    if (carte.classList.contains('retournee')) return; //déja retournée : ignore
+    if (carte.classList.contains('trouvee')) return; //déja trouvée : ignore 
+    if (cartesRetournees.length >= 2) return; //2 cartes déja retournées : ignore 
 
+    //RETOURNE LA CARTE
     carte.classList.add('retournee');
     sons.flip.currentTime = 0;
     sons.flip.play();
     cartesRetournees.push(carte);
 
+    //si 2 cartes retournées : vérification 
     if (cartesRetournees.length === 2) {
         
         coups++;
         elCoups.textContent = coups;
-        peutCliquer = false;
+        peutCliquer = false; //verrouille les clics 
 
         const [c1, c2] = cartesRetournees;
 
+        //COMPARAISON DES IMG
         if (c1.dataset.src === c2.dataset.src) {
             
+            //cas PAIRE TROUVEE 
             setTimeout(() => {
-
 
                 c1.classList.add('trouvee');
                 c2.classList.add('trouvee');
@@ -264,11 +348,11 @@ function clicCarte(carte) {
                 sons.paire.play();
                 cartesTrouvees += 2;
                 cartesRetournees = [];
-                peutCliquer = true;
+                peutCliquer = true; //dévérouille
 
                 const totalCartes = NIVEAUX[niveauIndex].nbPaires * 2;
                
-               
+               //si toutes les paires trouvées : VICTOIRE
                 if (cartesTrouvees === totalCartes) {
                     clearInterval(timerInterval);
                     setTimeout(() => afficherVictoire(), 500);
@@ -278,6 +362,8 @@ function clicCarte(carte) {
         } 
         
         else {
+
+            //cas PAS de paire 
             setTimeout(() => {
 
 
@@ -286,7 +372,7 @@ function clicCarte(carte) {
                 c1.classList.remove('retournee');
                 c2.classList.remove('retournee');
                 cartesRetournees = [];
-                peutCliquer = true;
+                peutCliquer = true; //dévérouille après 1 sec
 
             }, 1000);
         }
@@ -300,6 +386,12 @@ document.getElementById('btnMenuModal').addEventListener('click', () => {
     afficherAccueil();
 });
 
+/**
+ * affiche la modale de victoire du niveau 
+ * - Enregistre les stats du niveau
+ * - Joue le son de victoire
+ * - Affiche bouton "Niveau suivant" ou cache si dernier niveau
+ */
 function afficherVictoire() {
     enregistrerResultatNiveau();
 
@@ -313,12 +405,15 @@ function afficherVictoire() {
     const btnSuivant = document.getElementById('btnSuivant');
 
     if (niveauIndex < NIVEAUX.length - 1) {
+
+        //il reste encore des niveaux 
         btnSuivant.textContent = `Niveau ${NIVEAUX[niveauIndex].id + 1} →`;
         btnSuivant.style.display = 'block';
     } 
     
     else {
         
+        //Dernier niveau terminé 
         btnSuivant.style.display = 'none';
     }
 
@@ -327,7 +422,10 @@ function afficherVictoire() {
 
 
 
-// Jouer
+/**
+ * Bouton "Jouer" sur la page d'accueil
+ * Démarre une nouvelle partie au niveau 1
+ */
 document.getElementById('btnJouer').addEventListener('click', () => {
     niveauIndex = 0;
     resetMemoryRun();
@@ -341,7 +439,7 @@ document.getElementById('titrePrincipal').addEventListener('click', () => {
     afficherAccueil();
 });
 
-// Recommencer
+// Recommencer : rejoue le niveau actuel 
 document.getElementById('btnRecommencer').addEventListener('click', () => {
     initNiveau();
 });
@@ -351,12 +449,18 @@ document.getElementById('btnMenu').addEventListener('click', () => {
     afficherAccueil();
 });
 
-// Niveau suivant
+// Niveau suivant dans la modale de victoire
+//passe au niveau suivant ou affiche la modale de fin
 document.getElementById('btnSuivant').addEventListener('click', () => {
+    
     if (niveauIndex < NIVEAUX.length - 1) {
         niveauIndex++;
         initNiveau();
-    } else {
+    } 
+    
+    else {
+
+        //tous les niveaux terminés 
         modalVictoire.classList.remove('active');
         memoryRunCompleted = true;
         saveMemoryRunIfNeeded();
@@ -377,7 +481,12 @@ document.getElementById('btnDebut').addEventListener('click', () => {
     afficherAccueil();
 });
 
+//RACCOURCIS CLAVIER 
 
+/**
+ * ESPACE sur l'accueil qui démarre le jeu
+ * ESCAPE pendant le jeu pour retour à l'accueil
+ */
 document.addEventListener('keydown', e => {
     if (e.code === 'Space' && pageAccueil.style.display !== 'none') {
         e.preventDefault();
@@ -392,18 +501,25 @@ document.addEventListener('keydown', e => {
 });
 
 
-
+/**
+ * Crée 30 flocons de neige animés
+ * Tailles et vitesses aléatoires pour effet naturel
+ */
 const conteneurNeige = document.getElementById('neige-container');
 for (let i = 0; i < 30; i++) {
     const flocon   = document.createElement('div');
     const tailles  = ['petit', 'moyen', 'grand'];
     flocon.classList.add('flocon', tailles[Math.floor(Math.random() * 3)]);
-    flocon.textContent             = '❄';
-    flocon.style.left              = `${Math.random() * 100}%`;
+    flocon.textContent = '❄';
+    flocon.style.left= `${Math.random() * 100}%`;
     flocon.style.animationDuration = `${6 + Math.random() * 12}s`;
-    flocon.style.animationDelay    = `${Math.random() * 10}s`;
+    flocon.style.animationDelay = `${Math.random() * 10}s`;
     conteneurNeige.appendChild(flocon);
 }
 
+
+/**
+ * Sauvegarde le score avant de quitter la page
+ */
 window.addEventListener('beforeunload', saveMemoryRunIfNeeded);
 }
