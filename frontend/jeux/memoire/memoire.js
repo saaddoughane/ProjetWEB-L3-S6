@@ -48,6 +48,7 @@ let secondes = 0;              // Temps écoulé en secondes
 let timerInterval = null;      // Intervalle du chronomètre
 let peutCliquer = true;        // Verrou anti-spam (mutex)
 let niveauStats = [];          // Statistiques de chaque niveau
+let memorySavedLevels = 0;     // Nombre de niveaux deja sauvegardes
 let memoryRunSaved = false;    // Score déjà sauvegardé ?
 let memoryRunCompleted = false; // Tous les niveaux terminés ?
 
@@ -155,6 +156,7 @@ function resetMemoryRun() {
     niveauStats = [];
     memoryRunSaved = false;
     memoryRunCompleted = false;
+    memorySavedLevels = 0;
 }
 
 
@@ -204,6 +206,19 @@ function saveMemoryRunIfNeeded() {
     if (resume.completedLevels === 0 || resume.score <= 0) return;
 
     memoryRunSaved = true;
+
+    if (typeof saveScore === "function") {
+        saveScore("memory", resume.score, resume);
+    }
+}
+
+
+function saveMemoryProgressIfNeeded() {
+    const resume = construireResumeRun();
+    if (resume.completedLevels === 0 || resume.score <= 0) return;
+    if (resume.completedLevels <= memorySavedLevels) return;
+
+    memorySavedLevels = resume.completedLevels;
 
     if (typeof saveScore === "function") {
         saveScore("memory", resume.score, resume);
@@ -394,6 +409,7 @@ document.getElementById('btnMenuModal').addEventListener('click', () => {
  */
 function afficherVictoire() {
     enregistrerResultatNiveau();
+    saveMemoryProgressIfNeeded();
 
     sons.victoire.currentTime = 0;
     sons.victoire.play();
